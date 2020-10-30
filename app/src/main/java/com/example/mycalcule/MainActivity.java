@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         btn_trois.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ch = ch + 3;
+                ch = ch + "3";
                 textExpresion.setText(ch.toString());
             }
         });
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //********** opperation *****************************
+
         btn_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         btn_fois.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ch += "*";
+                ch += "X";
                 textExpresion.setText(ch.toString());
             }
         });
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     Scriptable scriptable = rhino.initSafeStandardObjects();
                     finalResult = rhino.evaluateString(scriptable, ch, "javascript", 1, null).toString();
                 } catch (Exception e) {
-                    finalResult = "0";
+                    finalResult = "ERREUR";
                 }
                 textResultat.setText(finalResult);
             }
