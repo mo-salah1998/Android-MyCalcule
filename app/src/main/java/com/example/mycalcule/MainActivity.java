@@ -1,8 +1,11 @@
 package com.example.mycalcule;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,14 +13,13 @@ import android.widget.TextView;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-import java.util.Arrays;
-
 public class MainActivity extends AppCompatActivity {
     private TextView btn_dote, btn_zero, btn_equal, btn_un, btn_deux, btn_trois, btn_plus, btn_moin, btn_six, btn_cinq, btn_quatre, btn_sept, btn_huit, btn_neuf, btn_fois, btn_ce, btn_parentese, btn_pct, btn_div;
     private ImageView btn_back;
     private TextView textExpresion, textResultat;
     private Boolean checkParentese = false;
     private String ch = "";
+    private String finalResult = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +141,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ch = "";
+                finalResult ="";
                 //System.out.println(ch.toString());
                 textExpresion.setText(ch.toString());
-                textResultat.setText("");
+                textResultat.setText(finalResult.toString());
+
+
+
             }
         });
         //********** opperation *****************************
@@ -181,12 +187,14 @@ public class MainActivity extends AppCompatActivity {
                 ch = ch.replaceAll("%", "/100");
                 Context rhino = Context.enter();
                 rhino.setOptimizationLevel(-1);
-                String finalResult = "";
+
                 try {
                     Scriptable scriptable = rhino.initSafeStandardObjects();
                     finalResult = rhino.evaluateString(scriptable, ch, "javascript", 1, null).toString();
+
                 } catch (Exception e) {
                     finalResult = "ERREUR";
+
                 }
                 textResultat.setText(finalResult);
             }
@@ -212,6 +220,22 @@ public class MainActivity extends AppCompatActivity {
                 textExpresion.setText(ch.toString());
             }
         });
+        if(savedInstanceState!= null) {
+           ch = savedInstanceState.getString("ch");
+           finalResult  = savedInstanceState.getString("finalResult");
+           textExpresion.setText(ch.toString());
+           textResultat.setText(finalResult.toString());
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("ch",ch);
+        outState.putString("finalResult",finalResult);
+
+
     }
 
     public static String delateLastCaracter(String ch) {
@@ -221,5 +245,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
+
 
 }
